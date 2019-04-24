@@ -1,0 +1,170 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>android 全局工具类范例 | houguokun</title>
+<link rel="shortcut icon" href="https://houziershi.github.io//favicon.ico?v=1556075109334">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://houziershi.github.io//styles/main.css">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+
+
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://houziershi.github.io/">
+  <img class="avatar" src="https://houziershi.github.io//images/avatar.png?v=1556075109334" alt="">
+  </a>
+  <h1 class="site-title">
+    houguokun
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="https://houziershi.github.io//tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="https://houziershi.github.io//post/about/" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+      
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              android 全局工具类范例
+            </h2>
+            <div class="post-info">
+              <time class="post-time">
+                · 2019-04-24 ·
+              </time>
+              
+                <a href="https://houziershi.github.io//tag/hW_SqxbcO" class="post-tags">
+                  # Android
+                </a>
+              
+            </div>
+            
+            <div class="post-content">
+              <ol>
+<li>application中初始化，全局单例变量。</li>
+<li>静态变量和初始化参数，一切尽在代码中。</li>
+</ol>
+<pre><code>import android.content.Context;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+
+import com.yatoooon.screenadaptation.loadviewhelper.AbsLoadViewHelper;
+import com.yatoooon.screenadaptation.loadviewhelper.LoadViewHelper;
+
+/**
+ * Created by yatoooon on 2018/2/6.
+ */
+
+public class ScreenAdapterTools {
+
+    private static AbsLoadViewHelper sLoadViewHelper;
+
+    public static AbsLoadViewHelper getInstance() {
+        return sLoadViewHelper;
+    }
+
+    public static void init(Context context) {
+        init(context, new IProvider() {
+            @Override
+            public AbsLoadViewHelper provide(Context context, int designWidth, int designDpi, float fontSize, String unit) {
+                return new LoadViewHelper(context, designWidth, designDpi, fontSize, unit);
+            }
+        });
+    }
+
+    public static void init(Context context, IProvider provider) {
+        ApplicationInfo applicationInfo = null;
+        try {
+            applicationInfo = context.getPackageManager().getApplicationInfo(context
+                    .getPackageName(), PackageManager.GET_META_DATA);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        int designwidth = applicationInfo.metaData.getInt(&quot;designwidth&quot;);
+        int designdpi = applicationInfo.metaData.getInt(&quot;designdpi&quot;);
+        float fontsize = applicationInfo.metaData.getFloat(&quot;fontsize&quot;);
+        String unit = applicationInfo.metaData.getString(&quot;unit&quot;);
+        sLoadViewHelper = provider.provide(context, designwidth, designdpi, fontsize, unit);
+    }
+
+    public interface IProvider {
+        AbsLoadViewHelper provide(Context context, int designWidth, int designDpi, float fontSize, String unit);
+    }
+}
+</code></pre>
+
+            </div>
+          </article>
+        </div>
+    
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://houziershi.github.io//post/zi-ding-yi-radiusbackgroundspan-zai-textview-she-zhi-tag">
+              <h3 class="post-title">
+                自定义RadiusBackgroundSpan在textview设置tag
+              </h3>
+            </a>
+          </div>  
+        
+
+        
+    
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,161 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>美团Android Crash治理之路_学习笔记 | houguokun</title>
+<link rel="shortcut icon" href="https://houziershi.github.io//favicon.ico?v=1556075109334">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="stylesheet" href="https://houziershi.github.io//styles/main.css">
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+
+
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://houziershi.github.io/">
+  <img class="avatar" src="https://houziershi.github.io//images/avatar.png?v=1556075109334" alt="">
+  </a>
+  <h1 class="site-title">
+    houguokun
+  </h1>
+  <p class="site-description">
+    温故而知新
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="https://houziershi.github.io//tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="https://houziershi.github.io//post/about/" class="menu">
+          关于
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+      
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              美团Android Crash治理之路_学习笔记
+            </h2>
+            <div class="post-info">
+              <time class="post-time">
+                · 2019-04-24 ·
+              </time>
+              
+                <a href="https://houziershi.github.io//tag/hW_SqxbcO" class="post-tags">
+                  # Android
+                </a>
+              
+            </div>
+            
+            <div class="post-content">
+              <h6 id="阅读疑问">阅读疑问</h6>
+<pre><code>? 尽量不使用静态变量，万不得已使用SharedPreferences 来存储。
+? Lifecycle
+? kotlin
+? 自定义Lint检查
+? android hook
+? android aop
+</code></pre>
+<h6 id="答疑">答疑</h6>
+<ul>
+<li>? 尽量不使用静态变量，万不得已使用SharedPreferences来存储。<br>
+因为Android系统中的应用进程并不是安全的，包括application对象、静态变量在内的进程级别变量并不会一直呆着内存里面，它会被kill掉，它真的有可能会被kill掉，真的真的，重要的事情说三遍。进程被杀死后静态变量没初始化。</li>
+</ul>
+<ol>
+<li>Crash率计算公式：Crash次数/DAU</li>
+<li>常见的Crash类型包括：空节点、角标越界、类型转换异常、实体对象没有序列化、数字转换异常、Activity或Service找不到等。</li>
+<li>NullPointerException问题和解决方案</li>
+</ol>
+<pre><code>  问题描述：
+  1. 对象本身没有进行初始化就进行操作。
+  2. 对象已经初始化过，但是被回收或者手动置为null，然后对其进行操作。
+</code></pre>
+<p>  问题一解决思路：</p>
+<pre><code>  1. 对可能为空的对象做判空处理。
+  2. 养成使用@NonNull和@Nullable注解的习惯。
+  3. 尽量不使用静态变量，万不得已使用SharedPreferences来存储。
+  4. 考虑使用Kotlin语言。
+</code></pre>
+<p>  问题二解决思路：</p>
+<pre><code>  1. Message、Runnable回调时，判断Activity/Fragment是否销毁或被移除；加try-catch保护；Activity/Fragment销毁时移除所有已发送的Runnable。
+  2. 封装LifecycleMessage/Runnable基础组件，并自定义Lint检查，提示使用封装好的基础组件。
+  3. 在BaseActivity、BaseFragment的onDestory()里把当前Activity所发的所有请求取消掉
+</code></pre>
+<ol start="4">
+<li>IndexOutOfBoundsException问题和解决思路</li>
+</ol>
+<pre><code>  问题描述：
+  1. 对ListView的操作和多线程下对容器的操作。
+  2. 外部引用对数据更改了，但没有及时调用notifyDataSetChanged()。
+  3. 常用的如JDK里的ArrayList和Android里的SparseArray、ArrayMap，同时也要注意有一些类的内部实现也是用的线程不安全的容器，如Bundle里用的就是ArrayMap。
+</code></pre>
+<h5 id="参考资料-br">参考资料 <br></h5>
+<p><a href="https://tech.meituan.com/waimai_android_crash.html">美团Android Crash治理之路</a></p>
+
+            </div>
+          </article>
+        </div>
+    
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://houziershi.github.io//post/android-quan-ju-gong-ju-lei-fan-li">
+              <h3 class="post-title">
+                android 全局工具类范例
+              </h3>
+            </a>
+          </div>  
+        
+
+        
+    
+        <div class="site-footer">
+  Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+      </div>
+    </div>
+  </body>
+</html>
